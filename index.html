@@ -36,14 +36,14 @@
             button.appendChild(t);
 
             button.addEventListener('click', function() {
-                var r = navigator.push.unregister(registration);
+                var r = navigator.push.unregister(registration.pushEndpoint);
                 r.onsuccess = function(e) {updateNotifications();};
                 r.onerror   = function(e) {alert("unregister failed");};
               }, false);
             
             
             var h = document.createElement("p");
-            t = document.createTextNode(registration);
+            t = document.createTextNode(registration.pushEndpoint);
             h.appendChild(t);
             
 
