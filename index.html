@@ -78,6 +78,16 @@
         }
       }
 
+      function logRegistrations() {
+        var req = navigator.push.registrations();
+        req.onsuccess = function(e) {
+          var registrations = e.target.result;
+          for (var i = 0; i < registrations.length; ++i) {
+            console.log(registrations[i].pushEndpoint);
+          }
+        }
+      }
+
     </script>
   </head>
 
@@ -85,6 +95,7 @@
     <p>Push Notifications</p>
 
     <button onclick="register();">Register!</button>
+    <button onclick="logRegistrations();">Log Registrations</button>
 
     <p>Registrations</p>
 
