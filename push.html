@@ -18,7 +18,7 @@
 
       navigator.mozSetMessageHandler('push', function(e) {
         console.log("Received push system message.");
-        sessionStorage.setItem("time", (new Date()).toString());
+        localStorage.setItem("time", (new Date()).toString());
       });
 
   </script>
