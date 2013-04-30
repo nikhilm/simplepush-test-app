@@ -16,17 +16,6 @@
 
     <script>
 
-      navigator.mozSetMessageHandler('push', function(e) {
-        var notification = window.navigator.mozNotification.createNotification('Push notification', 'From the template application');
-      
-        notification.onclick = function test_notificationClick() {
-          alert("Got system message! ");
-        };
-      
-        notification.show();
-      });
-
-
       function updateNotifications() {
 
         function createRegistrationUI(registration) {
@@ -67,14 +56,14 @@
       }
 
       function register() {
-        var req = navigator.push.register();
+        var req = navigator.push.register('http://nikhilm.github.com/simplepush-test-app/push.html');
 
         req.onsuccess = function(e) {
           updateNotifications();
         }
         
         req.onerror = function(e) {
-          alert("Registraiton error");
+          alert("Registration error " + req.error);
         }
       }
 
@@ -88,6 +77,9 @@
         }
       }
 
+      setInterval(function() {
+          console.log(sessionStorage.getItem("time"));
+      }, 5000);
     </script>
   </head>
 
