@@ -80,6 +80,8 @@
       setInterval(function() {
           console.log("Last push received at " + localStorage.getItem("time"));
       }, 5000);
+
+      var notification = window.navigator.mozNotification.createNotification('Push notification', 'From the SimplePush application');
     </script>
   </head>
 

@@ -19,6 +19,23 @@
       navigator.mozSetMessageHandler('push', function(e) {
         console.log("Received push system message.");
         localStorage.setItem("time", (new Date()).toString());
+
+        console.log("Sandbox",window.navigator);
+        var notification = window.navigator.mozNotification.createNotification('Push notification', 'From the SimplePush application');
+
+        notification.onclick = function test_notificationClick() {
+          console.log("FOOBARBAZ!");
+        };
+
+        notification.show();
+
+        var win = window.open('/index.html');
+        console.log("Opening window", win);
+      });
+
+      navigator.mozSetMessageHandler('push-register', function(e) {
+        var notification = window.navigator.mozNotification.createNotification('Lost all push registrations :(', 'From the SimplePush application');
+        notification.show();
       });
 
   </script>
