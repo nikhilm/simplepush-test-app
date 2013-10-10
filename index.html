@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="pragma" content="no-cache">
-    <title>Push</title>
+    <title>Push ServiceWorkers</title>
 
     <style>
       html, body {
@@ -15,43 +15,38 @@
     </style>
 
     <script>
-
-      navigator.mozSetMessageHandler('push', function(e) {
-        var notification = window.navigator.mozNotification.createNotification('Push notification', 'From the template application');
-      
-        notification.onclick = function test_notificationClick() {
-          alert("Got system message! ");
-        };
-      
-        notification.show();
-      });
-
+      if ("registerServiceWorker" in navigator) {
+        navigator.registerServiceWorker("/", "service.js").then(function(worker) {
+          console.log("Successfully registered service worker.");
+        });
+      } else {
+        alert("How dare you not have Service Workers!");
+      }
 
       function updateNotifications() {
 
         function createRegistrationUI(registration) {
+          var button = document.createElement("button");
+          var t   = document.createTextNode("Unregister");
+          button.appendChild(t);
 
-            var button = document.createElement("button");
-            var t   = document.createTextNode("Unregister");
-            button.appendChild(t);
+          button.addEventListener('click', function() {
+              var r = navigator.push.unregister(registration.pushEndpoint);
+              r.onsuccess = function(e) {updateNotifications();};
+              r.onerror   = function(e) {alert("unregister failed");};
+          }, false);
 
-            button.addEventListener('click', function() {
-                var r = navigator.push.unregister(registration.pushEndpoint);
-                r.onsuccess = function(e) {updateNotifications();};
-                r.onerror   = function(e) {alert("unregister failed");};
-              }, false);
-            
-            
-            var h = document.createElement("p");
-            t = document.createTextNode(registration.pushEndpoint);
-            h.appendChild(t);
-            
 
-            var div = document.createElement("div");
-            div.appendChild(button);
-            div.appendChild(h);
+          var h = document.createElement("p");
+          t = document.createTextNode(registration.pushEndpoint);
+          h.appendChild(t);
 
-            return div;
+
+          var div = document.createElement("div");
+          div.appendChild(button);
+          div.appendChild(h);
+
+          return div;
         }
 
         document.getElementById("registrations").innerHTML = "";
@@ -72,9 +67,9 @@
         req.onsuccess = function(e) {
           updateNotifications();
         }
-        
+
         req.onerror = function(e) {
-          alert("Registraiton error");
+          alert("Registration error");
         }
       }
 
@@ -88,6 +83,7 @@
         }
       }
 
+      Notification.requestPermission();
     </script>
   </head>
 
