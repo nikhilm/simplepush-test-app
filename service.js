@@ -1,10 +1,11 @@
 function debug(msg) {
-  dump("SimplePush Test App: " + msg + "\n");
+  dump("\nSimplePush Test App: " + msg + "\n\n");
 }
 
 debug("Started");
 
 addEventListener("push", function(e) {
+  debug("Got push!");
   var notification = new Notification('You got a push notification', { body: 'From the SimplePush application' });
   
   notification.onclick = function() {
@@ -18,4 +19,8 @@ addEventListener("push", function(e) {
 
 addEventListener("push-register", function(e) {
   debug("Lost all registrations :/");
+});
+
+addEventListener("install", function(e) {
+  debug("Got installed really?!");
 });

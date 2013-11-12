@@ -6,6 +6,7 @@
     <meta http-equiv="pragma" content="no-cache">
     <title>Push ServiceWorkers</title>
 
+    <link rel="stylesheet" href="/assets/v1/404.css">
     <style>
       html, body {
         width: 100%;
@@ -15,9 +16,10 @@
     </style>
 
     <script>
+        //var w = new Worker("service.j");
       if ("registerServiceWorker" in navigator) {
         navigator.registerServiceWorker("/", "service.js").then(function(worker) {
-          console.log("Successfully registered service worker.");
+          console.log("Successfully registered service worker.", worker);
         });
       } else {
         alert("How dare you not have Service Workers!");
