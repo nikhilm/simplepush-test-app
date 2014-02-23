@@ -10,8 +10,8 @@
 
     <script>
         //var w = new Worker("service.j");
-      if ("registerServiceWorker" in navigator) {
-        navigator.registerServiceWorker("/", "service.js").then(function(worker) {
+      if ("serviceWorker" in navigator) {
+        navigator.serviceWorker.register("service.js").then(function(worker) {
           console.log("Successfully registered service worker.", worker);
         });
       } else {
@@ -83,18 +83,18 @@
   </head>
 
   <body onload="updateNotifications();">
-    <!-- <p>Push Notifications</p>
+    <p>Push Notifications</p>
 
     <button onclick="register();">Register!</button>
     <button onclick="logRegistrations();">Log Registrations</button>
 
-    <p>Registrations</p> -->
+    <p>Registrations</p>
 
 
     <div id='registrations'>
     </div>
 
-    <script src="/data.js"> </script>
+    <!--<script src="/data.js"> </script>-->
   </body>
 
 </html>

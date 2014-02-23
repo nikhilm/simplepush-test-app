@@ -5,34 +5,34 @@ function debug(msg) {
 debug("Started");
 
 addEventListener("push", function(e) {
-  debug("Got push!");
-  var notification = new Notification('You got a push notification', { body: 'From the SimplePush application' });
-  
-  notification.onclick = function() {
-    debug("Clicked notification!");
-  };
-  
-  notification.onerror = function(e) {
-    debug("Notification error " + e.message);
-  }
+  debug("Got push! " + JSON.stringify(e));
+  //var notification = new Notification('You got a push notification', { body: 'From the SimplePush application' });
+  //
+  //notification.onclick = function() {
+  //  debug("Clicked notification!");
+  //};
+  //
+  //notification.onerror = function(e) {
+  //  debug("Notification error " + e.message);
+  //}
 });
 
 addEventListener("push-register", function(e) {
   debug("Lost all registrations :/");
 });
 
-addEventListener("install", function(e) {
-  debug("Got installed really?!");
-  e.waitUntil(new Promise(function(res) {
-    setTimeout(res, 100);
-  }));
-});
+//addEventListener("install", function(e) {
+//  debug("Got installed really?!");
+//  e.waitUntil(new Promise(function(res) {
+//    setTimeout(res, 100);
+//  }));
+//});
 
 var base = "http://localhost:8000";
 var js = new URL("/data.js", base);
 var css = new URL("/assets/v1/404.css", base);
 
-addEventListener("fetch", function(e) {
+/*addEventListener("fetch", function(e) {
   // FIXME(nsm): url will be a URL at some point
   if (e.request.url == js.href) {
     debug("MATCH JS!");
@@ -47,4 +47,4 @@ addEventListener("fetch", function(e) {
       body: "body { background: red }"
     }));
   }
-});
+});*/
