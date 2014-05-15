@@ -14,6 +14,7 @@
         navigator.serviceWorker.register("service.js").then(function(worker) {
           console.log("Successfully registered service worker.", worker);
         });
+        Notification.requestPermission();
       } else {
         alert("How dare you not have Service Workers!");
       }
@@ -78,7 +79,6 @@
         }
       }
 
-      Notification.requestPermission();
     </script>
   </head>
 
