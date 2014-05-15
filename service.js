@@ -5,5 +5,5 @@ function debug(msg) {
 debug("Started");
 
 addEventListener("push", function(e) {
-  console.log("Got push! " + JSON.stringify(e));
+  dump("Got push! " + JSON.stringify(e) + "\n");
 });
