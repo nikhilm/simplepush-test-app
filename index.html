@@ -55,7 +55,7 @@
         }
 
         document.getElementById("registrations").innerHTML = "";
-
+/*
         var req = navigator.pushRegistrationManager.register();
         req.onsuccess = function(e) {
           var registration = e.target.result;
@@ -67,19 +67,26 @@
         req.onerror = function(e) {
           console.log('error')
         }
+*/
+
       }
 
       function register() {
         var req = navigator.pushRegistrationManager.register();
         console.log('request sent')
-        req.onsuccess = function(e) {
-          console.log('success')
-          updateNotifications();
-        }
-        
-        req.onerror = function(e) {
-          alert("Registration error");
-        }
+
+        req.then(
+          function(e) {
+            console.log('success')
+            console.log(e)
+            updateNotifications();
+          },
+          function(e) {
+            //alert("Registration error");
+            console.log('registration error')
+            console.log(e)
+          }
+        )
       }
 
       function isRegistered(){
