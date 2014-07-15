@@ -10,12 +10,12 @@
       html, body {
         width: 100%;
         height: 100%;
-        background-color: grey;
+        background-color: gray;
       }
     </style>
 
     <script>
-
+/*
       navigator.mozSetMessageHandler('push', function(e) {
         var notification = window.navigator.mozNotification.createNotification('Push notification', 'From the template application');
       
@@ -27,81 +27,74 @@
       });
 
 
-      function updateNotifications() {
-
-        function createRegistrationUI(registration) {
-
-            var button = document.createElement("button");
-            var t   = document.createTextNode("Unregister");
-            button.appendChild(t);
-
-            button.addEventListener('click', function() {
-                var r = navigator.push.unregister(registration.pushEndpoint);
-                r.onsuccess = function(e) {updateNotifications();};
-                r.onerror   = function(e) {alert("unregister failed");};
-              }, false);
-            
-            
-            var h = document.createElement("p");
-            t = document.createTextNode(registration.pushEndpoint);
-            h.appendChild(t);
-            
-
-            var div = document.createElement("div");
-            div.appendChild(button);
-            div.appendChild(h);
-
-            return div;
-        }
-
-        document.getElementById("registrations").innerHTML = "";
-
-        var req = navigator.push.registrations();
-        req.onsuccess = function(e) {
-          var registrations = e.target.result;
-          for (var i = 0; i < registrations.length; ++i) {
-            var div = createRegistrationUI(registrations[i]);
-            document.getElementById("registrations").appendChild(div);
-          }
-        }
       }
-
+*/
       function register() {
-        var req = navigator.push.register();
-
-        req.onsuccess = function(e) {
-          updateNotifications();
-        }
-        
-        req.onerror = function(e) {
-          alert("Registraiton error");
-        }
+        var req = navigator.pushRegistrationManager.register()
+        .then(
+          function(endpoint) {
+            document.getElementById("registration").innerHTML = endpoint
+          },
+          function(e) {
+            document.getElementById("registration").innerHTML = endpoint 
+          }
+        )
       }
 
-      function logRegistrations() {
-        var req = navigator.push.registrations();
-        req.onsuccess = function(e) {
-          var registrations = e.target.result;
-          for (var i = 0; i < registrations.length; ++i) {
-            console.log(registrations[i].pushEndpoint);
+      function isRegistered(){
+        var req = navigator.pushRegistrationManager.isRegistered()
+        .then(
+          function(isRegistered){
+            document.getElementById("isRegistered").innerHTML = isRegistered          
+          },
+          function(error){
+            document.getElementById("isRegistered").innerHTML = error
           }
-        }
+        );
+      }
+
+      function unregister() {
+        navigator.pushRegistrationManager.unregister()
+        .then(
+          function(e){
+            document.getElementById("registration").innerHTML = "No Registration"
+          },
+          function(error){
+            document.getElementById("registration").innerHTML = error
+          }
+        );
+
+      }
+
+      function hasPermission(){
+        navigator.pushRegistrationManager.hasPermission()
+        .then(
+          function(hasPermission){
+            document.getElementById("hasPermission").innerHTML = hasPermission;
+          },
+          function(error){
+            document.getElementById("hasPermission").innerHTML = error;
+          }
+        );
       }
 
     </script>
   </head>
 
-  <body onload="updateNotifications();">
+  <body >
     <p>Push Notifications</p>
 
     <button onclick="register();">Register!</button>
-    <button onclick="logRegistrations();">Log Registrations</button>
+    <button onclick="unregister();">unregister</button>
+    
+    <div id='registration'>No Registration</div>
 
-    <p>Registrations</p>
+    <button onclick="isRegistered();">isRegistered</button>
+    <div id='isRegistered'>isRegistered</div>
 
-
-    <div id='registrations'>
-    </div>
+    
+    <button onclick="hasPermission();">hasPermission</button>
+    <div id='hasPermission'>hasPermission</div>
 
   </body>
 
