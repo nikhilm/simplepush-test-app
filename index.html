@@ -26,103 +26,75 @@
         notification.show();
       });
 
-*/
-      function updateNotifications() {
-
-        function createRegistrationUI(registration) {
-
-            var button = document.createElement("button");
-            var t   = document.createTextNode("Unregister");
-            button.appendChild(t);
-
-            button.addEventListener('click', function() {
-                var r = navigator.pushRegistrationManager.unregister();
-                r.onsuccess = function(e) {updateNotifications();};
-                r.onerror   = function(e) {alert("unregister failed");};
-              }, false);
-            
-            
-            var h = document.createElement("p");
-            t = document.createTextNode(registration.pushEndpoint);
-            h.appendChild(t);
-            
-
-            var div = document.createElement("div");
-            div.appendChild(button);
-            div.appendChild(h);
-
-            return div;
-        }
-
-        document.getElementById("registrations").innerHTML = "";
-/*
-        var req = navigator.pushRegistrationManager.register();
-        req.onsuccess = function(e) {
-          var registration = e.target.result;
-          console.log(registration)
-          var div = createRegistrationUI(registration);
-          document.getElementById("registrations").appendChild(div);
-
-        }
-        req.onerror = function(e) {
-          console.log('error')
-        }
-*/
 
       }
-
+*/
       function register() {
-        var req = navigator.pushRegistrationManager.register();
-        console.log('request sent')
-
-        req.then(
-          function(e) {
-            console.log('success')
-            console.log(e)
-            updateNotifications();
+        var req = navigator.pushRegistrationManager.register()
+        .then(
+          function(endpoint) {
+            document.getElementById("registration").innerHTML = endpoint
           },
           function(e) {
-            //alert("Registration error");
-            console.log('registration error')
-            console.log(e)
+            document.getElementById("registration").innerHTML = endpoint 
           }
         )
       }
 
       function isRegistered(){
-        var req = navigator.pushRegistrationManager.isRegistered();
-        req.onsuccess = function(e){
-          alert(e)
-        }
-        req.onerror = function(e){
-          alert(e)
-        }
+        var req = navigator.pushRegistrationManager.isRegistered()
+        .then(
+          function(isRegistered){
+            document.getElementById("isRegistered").innerHTML = isRegistered          
+          },
+          function(error){
+            document.getElementById("isRegistered").innerHTML = error
+          }
+        );
       }
 
-      function logRegistrations() {
-        var req = navigator.pushRegistrationManager.register();
-        req.onsuccess = function(e) {
-          var registration = e.target.result;
-          console.log(registration.pushEndpoint);
-          
-        }
+      function unregister() {
+        navigator.pushRegistrationManager.unregister()
+        .then(
+          function(e){
+            document.getElementById("registration").innerHTML = "No Registration"
+          },
+          function(error){
+            document.getElementById("registration").innerHTML = error
+          }
+        );
+
+      }
+
+      function hasPermission(){
+        navigator.pushRegistrationManager.hasPermission()
+        .then(
+          function(hasPermission){
+            document.getElementById("hasPermission").innerHTML = hasPermission;
+          },
+          function(error){
+            document.getElementById("hasPermission").innerHTML = error;
+          }
+        );
       }
 
     </script>
   </head>
 
-  <body onload="updateNotifications();">
+  <body >
     <p>Push Notifications</p>
 
     <button onclick="register();">Register!</button>
+    <button onclick="unregister();">unregister</button>
+    
+    <div id='registration'>No Registration</div>
+
     <button onclick="isRegistered();">isRegistered</button>
-    <button onclick="logRegistrations();">Log Registrations</button>
+    <div id='isRegistered'>isRegistered</div>
 
-    <p>Registrations</p>
-
-
-    <div id='registrations'>
-    </div>
+    
+    <button onclick="hasPermission();">hasPermission</button>
+    <div id='hasPermission'>hasPermission</div>
 
   </body>
 
