@@ -26,14 +26,14 @@
           button.appendChild(t);
 
           button.addEventListener('click', function() {
-              var r = navigator.push.unregister(registration.pushEndpoint);
-              r.onsuccess = function(e) {updateNotifications();};
-              r.onerror   = function(e) {alert("unregister failed");};
+              navigator.pushRegistrationManager.unregister()
+              .then(function(e) {updateNotifications();},
+                    function(e) {alert("unregister failed");});
           }, false);
 
 
           var h = document.createElement("p");
-          t = document.createTextNode(registration.pushEndpoint);
+          t = document.createTextNode(registration);
           h.appendChild(t);
 
 
@@ -46,36 +46,26 @@
 
         document.getElementById("registrations").innerHTML = "";
 
-        var req = navigator.push.registrations();
-        req.onsuccess = function(e) {
-          var registrations = e.target.result;
-          for (var i = 0; i < registrations.length; ++i) {
-            var div = createRegistrationUI(registrations[i]);
-            document.getElementById("registrations").appendChild(div);
-          }
-        }
+        navigator.pushRegistrationManager.isRegistered()
+          .then(function(is) {
+            if (is) {
+              navigator.pushRegistrationManager.register()
+                .then(function(reg) {
+                  var div = createRegistrationUI(reg);
+                  document.getElementById("registrations").appendChild(div);
+                });
+            }
+          });
       }
 
       function register() {
-        var req = navigator.push.register();
+        var req = navigator.pushRegistrationManager.register();
 
-        req.onsuccess = function(e) {
+        req.then(function() {
           updateNotifications();
-        }
-
-        req.onerror = function(e) {
+        }, function(e) {
           alert("Registration error");
-        }
-      }
-
-      function logRegistrations() {
-        var req = navigator.push.registrations();
-        req.onsuccess = function(e) {
-          var registrations = e.target.result;
-          for (var i = 0; i < registrations.length; ++i) {
-            console.log(registrations[i].pushEndpoint);
-          }
-        }
+        });
       }
 
     </script>
@@ -85,7 +75,6 @@
     <p>Push Notifications</p>
 
     <button onclick="register();">Register!</button>
-    <button onclick="logRegistrations();">Log Registrations</button>
 
     <p>Registrations</p>
 
